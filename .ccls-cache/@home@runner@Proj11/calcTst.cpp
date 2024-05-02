@@ -2,59 +2,32 @@
 #include <iostream>
 
 using namespace std;
+int main(int argc, char *argv[]) {
 
-int main() {
-    // Test CheckTokens with valid input
-    Calc calculator1("((A+B)*(C-D))");
-    Calc calculator2("(A-B)*C");
-    Calc calculator3("((B*A)-G)");
-    Calc calculator4("((V-R)+A)");
-    Calc calculator5("(B-A)*(B*T)");
-    Calc calculator6("121+12");
+  if (argc != 2) {
+    cout << "Invalid input. Please try again." << endl;
+    return 1;
+  }
 
-    if (!calculator1.CheckTokens()) {
-        cout << "CheckTokens test failed\n";
-    } else {
-        cout << "CheckTokens test passed\n";
-    }
+  Calc *C = new Calc(argv[1]);
 
-    // Test CheckParens
-    if (!calculator1.CheckParens()) {
-        cout << "CheckParens test failed\n";
-    } else {
-        cout << "CheckParens test passed\n";
-    }
+  if (C->CheckTokens()) {
+    cout << "CheckTokens test passed\n";
+  } else {
+    cout << "CheckTokens test failed\n";
+  }
 
-    // Test Parse and DisplayInFix
-    calculator1.Parse();
-    calculator1.DisplayInFix();
-    calculator2.Parse();
-    calculator2.DisplayInFix();
-    calculator3.Parse();
-    calculator3.DisplayInFix();
-    calculator4.Parse();
-    calculator4.DisplayInFix();
-    calculator5.Parse();
-    calculator5.DisplayInFix();
-    calculator6.Parse();
-    calculator6.DisplayInFix();
+  if (C->CheckParens()) {
+    cout << "CheckParens test passed\n";
+  } else {
+    cout << "CheckParens test failed\n";
+  }
 
-    // Test InFixToPostFix and DisplayPostFix
-    calculator1.InFixToPostFix();
-    calculator1.DisplayPostFix();
-    calculator2.InFixToPostFix();
-    calculator2.DisplayPostFix();
-    calculator3.InFixToPostFix();
-    calculator3.DisplayPostFix();
-    calculator4.InFixToPostFix();
-    calculator4.DisplayPostFix();
-    calculator5.InFixToPostFix();
-    calculator5.DisplayPostFix();
-    calculator6.InFixToPostFix();
-    calculator6.DisplayPostFix();
+  C->Parse();
+  C->DisplayInFix();
+  C->InFixToPostFix();
+  C->DisplayPostFix();
+  cout << "Evaluation: " << C->Evaluate() << endl;
 
-    // Test Evaluate
-    cout << "Result of evaluation: " << calculator6.Evaluate() << endl;
-
-    return 0;
+  return 0;
 }

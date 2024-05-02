@@ -1,6 +1,6 @@
 
 /*
-Name: Paul De Palma
+Name: 
 Class: CPSC 122, Section 1
 Date Submitted: February 25, 2021
 Assignment: N/A
@@ -132,15 +132,8 @@ public:
   */
   bool CheckParens();
 
-  void InFixToPostFix();
-
-  void DisplayPostFix();
-
-  int Evaluate();
-
 private:
   char *inFix;   // null-terminated string that holds infix expression
-  char *postFix; // null-terminated string that holds infix expression
   int *valueTbl; // pointer to an array holding variable and expression values
   int valueIdx;  // index of the next available position in valueTbl
   Stack *stk;

@@ -11,23 +11,24 @@ int main(int argc, char *argv[]) {
 
   Calc *C = new Calc(argv[1]);
 
-  if (C->CheckTokens()) {
-    cout << "CheckTokens test passed\n";
-  } else {
+  // Test CheckTokens with valid input
+  // Calc calculator1(argv[1]);
+
+  if (!C->CheckTokens()) {
     cout << "CheckTokens test failed\n";
+  } else {
+    cout << "CheckTokens test passed\n";
   }
 
-  if (C->CheckParens()) {
-    cout << "CheckParens test passed\n";
-  } else {
+  if (!C->CheckParens()) {
     cout << "CheckParens test failed\n";
+  } else {
+    cout << "CheckParens test passed\n";
   }
 
   C->Parse();
   C->DisplayInFix();
-  C->InFixToPostFix();
-  C->DisplayPostFix();
-  cout << "Evaluation: " << C->Evaluate() << endl;
+  
 
   return 0;
 }

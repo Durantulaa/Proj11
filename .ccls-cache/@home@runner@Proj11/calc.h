@@ -138,6 +138,7 @@ public:
 
   int Evaluate();
 
+private:
   char *inFix;   // null-terminated string that holds infix expression
   char *postFix; // null-terminated string that holds infix expression
   int *valueTbl; // pointer to an array holding variable and expression values
