@@ -1,10 +1,9 @@
 
 /*
-Name: Paul De Palma
+Name: Fady Youssef
 Class: CPSC 122, Section 1
-Date Submitted: April 24, 2022 
-Assignment: N/A 
-Description: Part 2 of Calculator Assignment 
+Date Submitted: April 24, 2024
+=Description: Part 2 of Calculator Assignment 
 To Compile: make
 To Execute: ./calc "(121+12)"
 */

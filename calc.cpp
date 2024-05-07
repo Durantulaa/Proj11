@@ -1,3 +1,12 @@
+/*
+Name: Fady Youssef
+Class: CPSC 122, Section 1
+Date Submitted: April 24, 2024
+=Description: Part 2 of Calculator Assignment 
+To Compile: make
+To Execute: ./calc "(121+12)"
+*/
+
 #include "calc.h"
 #include <cctype>  // Include cctype for isdigit and isalpha
 #include <cstdlib> // Include cstdlib for exit function
