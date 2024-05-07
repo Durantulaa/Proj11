@@ -8,20 +8,67 @@ using namespace std;
 
 Calc::Calc(const char *argvIn) {
   stk = new Stack();
-  valueTbl = new int[26];
-  valueIdx = 0;
+
   int len = strlen(argvIn);
-  inFix = new char[len + 1]; // Add 1 for the null terminator
-  strcpy(inFix, argvIn);
+  inFix = new char[len + 1];   // Add 1 for the null terminator
   postFix = new char[len + 1]; // Add 1 for the null terminator
-  postFix[0] = '\0';           // Initialize with null terminator
+
+  strcpy(inFix, argvIn);
+
+  if (!CheckTokens())
+    cout << "invalid token input\n";
+  else
+    cout << "Tokens Balanced\n";
+  if (!CheckParens())
+    cout << "invalid parens input\n";
+  else
+    cout << "Parens Balanced\n";
+
+  MakeValueTbl();
+  Parse();
+  InFixToPostFix();
 }
 
 Calc::~Calc() {
   delete[] inFix;
-  delete[] postFix; // Free the memory allocated for postFix
+  delete[] postFix;
   delete[] valueTbl;
-  delete stk;
+}
+
+void Calc::MakeValueTbl() {
+  valueTbl = new int[26];
+  for (int i = 0; i < 26; i++)
+    valueTbl[i] = 0;
+}
+
+int Calc::FindLast(int cur) {
+
+  int last = cur;
+  while (isdigit(inFix[last])) {
+    last++;
+  }
+  return last - 1; // return last digit
+}
+
+bool Calc::CheckParens() {
+  bool bal = true;
+  int i = 0;
+  char ch = inFix[i];
+  while (bal && ch != '\0') {
+    if (ch == '(')
+      stk->Push(ch);
+    else if (ch == ')') {
+      if (!stk->IsEmpty())
+        stk->Pop();
+      else
+        bal = false;
+    }
+    i++;
+    ch = inFix[i];
+  }
+  if (bal && stk->IsEmpty())
+    return true;
+  return false;
 }
 
 bool Calc::CheckTokens() {
@@ -36,64 +83,41 @@ bool Calc::CheckTokens() {
   return true;
 }
 
-void Calc::MakeValueTbl() {
-  for (int i = 0; i < 26; i++)
-    valueTbl[i] = 0;
-}
-
-int Calc::FindLast(int cur) {
-  int last = cur;
-  while (isdigit(inFix[last++])) {
-    if (!isdigit(inFix[last]))
-      return last;
-  }
-  return last; // return last digit
-}
-
 void Calc::Parse() {
   MakeValueTbl(); // initialize value table
-  int len = strlen(inFix);
-  int i = 0; // initialize loop index
-  while (i < len) {
-    if (isalpha(inFix[i])) {
-      // find the last index of the variable
-      int lastIndex = FindLast(i);
-      // convert variable to index in value table
-      int varIndex = inFix[i] - 'A';
-      // if variable hasn't been assigned a value, set it to zero
-      if (valueTbl[varIndex] == 0) {
-        valueTbl[varIndex] = 0;
-      }
-      // move to the next character after the variable
-      i = lastIndex;
-    } else {
-      // move to the next character
-      i++;
-    }
-  }
-}
-
-bool Calc::CheckParens() {
-  bool bal = true; // idk what exactly this does
   int i = 0;
-  char ch = inFix[i];
-  while (bal && ch != '\0') {
-    if (ch == '(')
-      stk->Push(ch);
-    else if (ch == ')') {
-      if (stk->IsEmpty())
-        return false;
+  int j = 0;
+  int last = 0;
+
+  while (inFix[i] != '\0') {
+    if (inFix[i] == '(') {
+      inFix[j++] = inFix[i];
+      stk->Push(inFix[i]);
+    } else if (inFix[i] == ')') {
+      while (stk->Peek() != '(') {
+        inFix[j++] = stk->Peek();
+        stk->Pop();
+      }
+      inFix[j++] = inFix[i];
       stk->Pop();
     }
-    i++;
-    ch = inFix[i];
-  }
-  if (bal && stk->IsEmpty())
-    return true;
-  return false;
-}
 
-void Calc::DisplayInFix() { cout << "InFix: " << inFix << endl; }
+    else if (isdigit(inFix[i])) {
+      last = FindLast(i);
+      int num = 0;
+      for (int k = i; k <= last; k++) {
+        num = num * 10 + (inFix[k] - '0');
+      }
+      inFix[j++] = 'A' + valueIdx;
+      valueTbl[valueIdx++] = num;
+      i = last;
+    } else {
+      inFix[j++] = inFix[i];
+    }
+    i++;
+  }
+  inFix[j] = '\0';
+}
 
 void Calc::InFixToPostFix() {
   char ch;
@@ -116,8 +140,6 @@ void Calc::InFixToPostFix() {
   }
   postFix[i] = '\0'; // Add null terminator at the end
 }
-
-void Calc::DisplayPostFix() { cout << "PostFix: " << postFix << endl; }
 
 int Calc::Evaluate() {
   InFixToPostFix(); // Convert infix expression to postfix
@@ -150,3 +172,7 @@ int Calc::Evaluate() {
   int result = stk->Pop(); // Return the final result
   return result;
 }
+
+void Calc::DisplayPostFix() { cout << "PostFix: " << postFix << endl; }
+
+void Calc::DisplayInFix() { cout << "InFix: " << inFix << endl; }
