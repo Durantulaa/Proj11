@@ -137,22 +137,23 @@ int Calc::Evaluate() {
     ch = postFix[i];
     if (isalpha(ch)) {
       stk->Push(valueTbl[ch - 'A']); // Push operand value onto the stack
+      
     } else if (isdigit(ch)) {
       stk->Push(ch - '0'); // Push digit onto the stack
+      
     } else if (ch == '+' || ch == '-' || ch == '*') {
       op2 = stk->Pop();
       op1 = stk->Pop();
+      
       switch (ch) {
       case '+':
         stk->Push(op1 + op2); // Perform addition and push result onto the stack
         break;
       case '-':
-        stk->Push(op1 -
-                  op2); // Perform subtraction and push result onto the stack
+        stk->Push(op1 - op2); // Perform subtraction and push result onto the stack
         break;
       case '*':
-        stk->Push(op1 *
-                  op2); // Perform multiplication and push result onto the stack
+        stk->Push(op1 * op2); // Perform multiplication and push result onto the stack
         break;
       }
     }
